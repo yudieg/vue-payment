@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "type": "Credit",
+        "method": "Mastercard",
+        "nickname": "1234"
+    },
+    {
+        "id": 2,
+        "type": "Credit",
+        "method": "Visa",
+        "nickname": "1234"
+    }
+]
