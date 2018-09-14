@@ -1,10 +1,31 @@
 <template>
-    <div>
-        <h3>Credit Card</h3>
-        <card-list></card-list>
+    <div class="card-list-component">
+        <ul>
+            <li v-for="item in wallets" v-bind:key="item.id">
+                <div class="wallet-title"><span v-if="item.id!=0">{{ item.id }}.</span><span v-else>New</span> {{item.type}} - {{item.nickname}}
+                <button v-on:click="edit(item.id)" v-if="item.id!=0">edit</button>
+                </div>
+                <div class="editor" v-if="editing == item.id">
+                    <!-- todo move this to edit component -->
+                    <h4>Edit {{editWallet.type}} - {{editWallet.nickname}}</h4>
+                    <div>
+                        <p>Card Number: <input type="text" v-model="editWallet.nickname"/></p>
+                        <p>Expiration: <select></select></p>
+
+                    </div>
+                    <div class="button-row">
+                        <button v-on:click.prevent="save">Save</button >
+                        <button v-on:click.prevent="cancel">Cancel</button>
+                        <div class="more">
+                        <button v-on:click.prevent="cancel">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <button v-on:click="add('Check')">Add Payment Method</button>
     </div>
 </template>
-
 <style scoped>
 h2, h1{
     color:#888;
@@ -29,12 +50,10 @@ li {
 }
 </style>
 <script>
-import CardList from './CardList'
 // import data from '@/mocks/payment-methods-data.json'
 
 export default {
-  name: 'wallets',
-  components: {CardList},
+  name: 'card-list',
   newWallet: null,
   methods: {
     add: function (type) {

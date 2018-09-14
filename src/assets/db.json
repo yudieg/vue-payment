@@ -1,0 +1,19 @@
+{
+  "wallets": [
+    {
+      "id": 1,
+      "type": "Check",
+      "method": "Credit",
+      "nickname": "4111111111111111"
+    },
+    {
+      "id": 2,
+      "type": "Check",
+      "method": "Credit",
+      "nickname": "asdasdsd"
+    }
+  ],
+  "autopay": {
+    "id": 1
+  }
+}
