@@ -2,9 +2,19 @@
     <div>
         <h3>Credit Card</h3>
         <card-list></card-list>
+        <display-value data-src="http://localhost:3000/display_value"/>
     </div>
 </template>
+<script>
+import CardList from './CardList'
+import DisplayValue from './DisplayValue'
+// import data from '@/mocks/payment-methods-data.json'
 
+export default {
+  name: 'payment-methods',
+  components: {CardList, DisplayValue}
+}
+</script>
 <style scoped>
 h2, h1{
     color:#888;
@@ -28,102 +38,3 @@ li {
   padding:10px
 }
 </style>
-<script>
-import CardList from './CardList'
-// import data from '@/mocks/payment-methods-data.json'
-
-export default {
-  name: 'wallets',
-  components: {CardList},
-  newWallet: null,
-  methods: {
-    add: function (type) {
-      let newId = 0
-      this.editing = newId
-      this.newWallet = {
-        id: newId,
-        type: type,
-        method: 'Credit',
-        nickname: '0000'
-      }
-      this.editWallet = this.newWallet
-      this.wallets.push(this.newWallet)
-    },
-    edit: function (id) {
-      this.editing = id
-      // this.editWallet = {}
-      this.editWallet = Object.assign({}, this.getWalletById(id))
-      console.log(this.editWallet)
-    },
-    save: function () {
-      if (this.newWallet) {
-        let newWallet = this.wallets.pop()
-        newWallet.id = null
-        this.saveNew(newWallet)
-      } else if (this.editing) {
-        this.update(this.editing)
-      }
-    },
-    saveNew: function (wallet) {
-      this.$http.post('http://localhost:3000/wallets', wallet)
-        .then(function (r) {
-          console.log(r)
-          wallet.id = r.body.id
-          this.wallets.push(wallet)
-          this.newWallet = null
-        }.bind(this))
-    },
-    update: function (id) {
-      this.$http.put('http://localhost:3000/wallets/' + id, this.editWallet)
-        .then(function (r) {
-          console.log(r)
-          this.wallets[this.getWalletIndexById(id)] = this.editWallet
-          this.editing = null
-        }.bind(this))
-    },
-    getWalletById: function (id) {
-      var wallet = this.wallets.filter(item => item.id === id)
-      console.log(wallet)
-      if (wallet) {
-        return wallet.pop()
-      }
-    },
-    getWalletIndexById: function (id) {
-      for (var i in this.wallets) {
-        if (this.wallets[i].id === id) {
-          return i
-        }
-      }
-    },
-    cancel: function () {
-      if (this.newWallet) {
-        this.wallets.pop()
-        this.newWallet = null
-      }
-
-      this.editing = null
-    },
-    nextId: function () {
-      this.maxId++
-      return this.maxId
-    },
-    receiveWallets: function (response) {
-      console.log(response)
-      this.wallets = response.body
-    }
-  },
-  data () {
-    console.log(this.data)
-    this.$http.get('http://localhost:3000/wallets')
-      .then(this.receiveWallets)
-    return {
-      maxId: 2,
-      editing: null,
-      editWallet: {},
-      wallets: [],
-
-      msg: 'Welcome to Your Vue.js App'
-    }
-  }
-}
-</script>
